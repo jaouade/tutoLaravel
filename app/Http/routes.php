@@ -14,11 +14,14 @@
 Route::get('/', 'WelcomeController@index');
 
 Route::get('home', 'HomeController@index');
-Route::get('about', 'PagesController@about');
-Route::group(['prefix'=>'admin'],function (){
-    Route::get('salut/{slug}-{id}', ["as"=>"salut",'uses'=>'CoolController@index'])->where('slug','[a-z0-9\-]+')->where('id','[0-9]+');
+//Route::get('links/create','LinksController@create');
+Route::resource('link','LinksController',['only'=>['create','store']]);
+Route::resource('news','PostsController');
+Route::get('r/{link}',['as'=>'link.show','uses'=>'LinksController@show'])->where('link','[0-9]+');
 
-});
+//Route::post('links/create','LinksController@store');
+//Route::get('links/{id}','LinksController@show')->where('id','[0-9]+');
+
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
