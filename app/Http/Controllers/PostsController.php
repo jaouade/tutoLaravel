@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\Category;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +16,7 @@ class PostsController extends Controller {
 	 */
 	public function index()
 	{
-		$posts = Post::get();
+		$posts = Post::with('category')->get();
 		return view('posts.index',compact('posts'));
 	}
 
@@ -26,7 +27,9 @@ class PostsController extends Controller {
 	 */
 	public function create()
 	{
-		return view('posts.create');
+	    $post = new Post();
+        $categories = Category::lists('name','id');
+		return view('posts.create',compact('post','categories'));
 	}
 
 	/**
@@ -49,7 +52,11 @@ class PostsController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+        $post = Post::published()->where('id',$id)->first();
+        if($post ==null){
+            return new Post();
+        }
+        return $post;
 	}
 
 	/**
@@ -61,7 +68,8 @@ class PostsController extends Controller {
 	public function edit($id)
 	{
 		$post = Post::find($id);
-		return view('posts.edit',compact('post'));
+		$categories = Category::lists('name','id');
+		return view('posts.edit',compact('post','categories'));
 	}
 
 	/**
@@ -74,7 +82,6 @@ class PostsController extends Controller {
 	{
 	    $post = Post::find($id);
 	    $post->update($request->all());
-	    dd($post);
 		return redirect(route('news.edit',$id));
 	}
 

@@ -2,6 +2,7 @@
 
 
 @section('content')
+    <div class="container">
     <div class="row">
     @forelse($posts as $post)
 
@@ -14,7 +15,13 @@
                         <a href="{{route('news.edit',$post)}}" class="btn btn-primary">See and edit the article</a>
                     </div>
                 </div>
+                @if($post->category)
+
+                    <p class="text-success">category->{{$post->category->name}}</p>
+
+                @endif
             </div>
+
 
 
 
@@ -36,5 +43,5 @@
 
     @endforelse
 
-
+    </div>
     @stop
