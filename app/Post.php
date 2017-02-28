@@ -4,8 +4,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 class Post extends Model {
 
-    protected $fillable = ['title','slug','content','online','category_id'];
+    protected $fillable = ['title','slug','content','online','category_id','tags_list','user_id'];
 
+
+    public function tags(){
+        return $this->belongsToMany('App\Tag');
+    }
     public function category(){
         return $this->belongsTo('App\Category');
     }
@@ -19,6 +23,13 @@ class Post extends Model {
         if(empty($value)){
             $this->attributes['slug']= Str::slug($this->title);
         }
+    }
+    public function getTagsListAttribute(){
+        if($this->id)
+            return $this->tags->lists('id');
+    }
+    public function setTagsListAttribute($value){
+        return $this->tags()->sync($value);
     }
     public function getDates(){
         return ['created_at','published_at','updated_at'];

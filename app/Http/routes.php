@@ -18,6 +18,10 @@ Route::get('home', 'HomeController@index');
 Route::resource('link','LinksController',['only'=>['create','store']]);
 Route::resource('news','PostsController');
 Route::get('r/{link}',['as'=>'link.show','uses'=>'LinksController@show'])->where('link','[0-9]+');
+Route::get('contact','PagesController@contact');
+Route::group(['namespace'=>'Admin','prefix'=>'admin'],function (){
+    Route::resource('posts','PostsController');
+});
 
 //Route::post('links/create','LinksController@store');
 //Route::get('links/{id}','LinksController@show')->where('id','[0-9]+');
